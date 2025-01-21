@@ -2,9 +2,11 @@ import Profile from "../assets/profile.png";
 import LogoWhite from "../assets/logo-white.png";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
-  let user = null;
+  const { user } = useSelector((state) => state.auth);
+  const { inbox } = useSelector((state) => state.message);
 
   const { pathname } = useLocation();
 
@@ -159,7 +161,7 @@ const Navbar = () => {
                   </svg>
                 </button>
                 <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                  2
+                  {inbox.length}
                   {/* <!-- Replace with the actual number of notifications --> */}
                 </span>
               </Link>

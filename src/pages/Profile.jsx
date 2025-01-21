@@ -1,6 +1,9 @@
+import { useSelector } from "react-redux";
 import ProfileImage from "../assets/profile.png";
 import ListingCard from "../components/ListingCard";
 const Profile = () => {
+  const { user } = useSelector((state) => state.auth);
+
   return (
     <>
       <section className="bg-blue-50">
@@ -17,11 +20,10 @@ const Profile = () => {
                   />
                 </div>
                 <h2 className="text-2xl mb-4">
-                  <span className="font-bold block">Name: </span> John Doe
+                  <span className="font-bold block">Name: </span> {user.name}
                 </h2>
                 <h2 className="text-2xl">
-                  <span className="font-bold block">Email: </span>{" "}
-                  john@gmail.com
+                  <span className="font-bold block">Email: </span> {user.email}
                 </h2>
               </div>
 

@@ -12,12 +12,14 @@ import Profile from "./pages/Profile";
 import SavedProperties from "./pages/SavedProperties";
 import Property from "./pages/Property";
 import { ToastContainer } from "react-toastify";
+import PageNotFound from "./pages/PageNotFound";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
+        <Route path="*" element={<PageNotFound />} />
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
