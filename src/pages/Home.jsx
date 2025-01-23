@@ -1,11 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PropertyFeatureCard from "../components/PropertyFeatureCard";
 import HeroSection from "../components/HeroSection";
 import FeaturedCard from "../components/FeaturedCard";
 import PropertyCard from "../components/PropertyCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Home = () => {
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // if (!user) {
+    //   navigate("/login");
+    // }
+
+    if (isError && message) {
+      toast.error(message, { position: "bottom-center", theme: "colored" });
+    }
+  }, [user, isError, message]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <>
       {/* Hero Section */}

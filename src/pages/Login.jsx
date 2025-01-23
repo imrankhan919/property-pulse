@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Login = () => {
   const { user, isLoading, isError, isSuccess, message } = useSelector(
@@ -32,12 +33,18 @@ const Login = () => {
   };
 
   useEffect(() => {
-    toast.warn("Kindly Login First!!", {
-      position: "bottom-center",
-      theme: "colored",
-      autoClose: 1000,
-    });
-  }, []);
+    if (user) {
+      navigate("/");
+    }
+
+    if (isError && message) {
+      toast.error(message, { position: "bottom-center", theme: "colored" });
+    }
+  }, [user, isError, message]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

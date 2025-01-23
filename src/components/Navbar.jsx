@@ -2,13 +2,15 @@ import Profile from "../assets/profile.png";
 import LogoWhite from "../assets/logo-white.png";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { logOutUser } from "../features/auth/authSlice";
 
 const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
   const { inbox } = useSelector((state) => state.message);
 
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -22,6 +24,10 @@ const Navbar = () => {
     setTimeout(() => {
       setProfileOpen((prev) => (prev ? false : true));
     }, 5000);
+  };
+
+  const handleLogOut = () => {
+    dispatch(logOutUser());
   };
 
   return (
@@ -93,16 +99,20 @@ const Navbar = () => {
                 >
                   Properties
                 </Link>
-                <Link
-                  to="/add-property"
-                  className={
-                    pathname === "/add-property"
-                      ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
-                      : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
-                  }
-                >
-                  Add Property
-                </Link>
+                {user ? (
+                  <Link
+                    to="/add-property"
+                    className={
+                      pathname === "/add-property"
+                        ? "text-white bg-black hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
+                        : "text-white hover:bg-gray-900 hover:text-white rounded-md px-3 py-2"
+                    }
+                  >
+                    Add Property
+                  </Link>
+                ) : (
+                  <></>
+                )}
               </div>
             </div>
           </div>
@@ -160,10 +170,14 @@ const Navbar = () => {
                     />
                   </svg>
                 </button>
-                <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
-                  {inbox.length}
-                  {/* <!-- Replace with the actual number of notifications --> */}
-                </span>
+                {!inbox ? (
+                  <></>
+                ) : (
+                  <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/2 -translate-y-1/2 bg-red-600 rounded-full">
+                    {inbox.length}
+                    {/* <!-- Replace with the actual number of notifications --> */}
+                  </span>
+                )}
               </Link>
               {/* <!-- Profile dropdown button --> */}
               <div className="relative ml-3">
@@ -222,6 +236,7 @@ const Navbar = () => {
                     role="menuitem"
                     tabIndex="-1"
                     id="user-menu-item-2"
+                    onClick={handleLogOut}
                   >
                     Sign Out
                   </button>

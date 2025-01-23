@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { registerUser } from "../features/auth/authSlice";
+import LoadingScreen from "../components/LoadingScreen";
 
 const Register = () => {
   const { user, isLoading, isError, isSuccess, message } = useSelector(
@@ -40,6 +41,20 @@ const Register = () => {
       dispatch(registerUser(formData));
     }
   };
+
+  useEffect(() => {
+    if (user) {
+      navigate("/");
+    }
+
+    if (isError && message) {
+      toast.error(message, { position: "bottom-center", theme: "colored" });
+    }
+  }, [user, isError, message]);
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>

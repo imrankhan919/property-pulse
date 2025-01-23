@@ -1,7 +1,33 @@
+import { useState } from "react";
 import PropertyImage from "../assets/properties/a1.jpg";
 import Search from "../components/Search";
+import { useDispatch } from "react-redux";
+import { sendMessage } from "../features/message/messageSlice";
 
 const Property = () => {
+  const dispatch = useDispatch();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const { name, email, phone, message } = formData;
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(sendMessage(formData));
+  };
+
   return (
     <>
       <Search />
@@ -179,11 +205,11 @@ const Property = () => {
                 <h3 className="text-xl font-bold mb-6">
                   Contact Property Manager
                 </h3>
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
-                      for="name"
+                      htmlFor="name"
                     >
                       Name:
                     </label>
@@ -191,6 +217,9 @@ const Property = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="name"
                       type="text"
+                      name="name"
+                      value={name}
+                      onChange={handleChange}
                       placeholder="Enter your name"
                       required
                     />
@@ -198,7 +227,7 @@ const Property = () => {
                   <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
-                      for="email"
+                      htmlFor="email"
                     >
                       Email:
                     </label>
@@ -206,6 +235,9 @@ const Property = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="email"
                       type="email"
+                      name="email"
+                      value={email}
+                      onChange={handleChange}
                       placeholder="Enter your email"
                       required
                     />
@@ -213,7 +245,7 @@ const Property = () => {
                   <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
-                      for="phone"
+                      htmlFor="phone"
                     >
                       Phone:
                     </label>
@@ -221,19 +253,25 @@ const Property = () => {
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="phone"
                       type="text"
+                      name="phone"
+                      value={phone}
+                      onChange={handleChange}
                       placeholder="Enter your phone number"
                     />
                   </div>
                   <div className="mb-4">
                     <label
                       className="block text-gray-700 text-sm font-bold mb-2"
-                      for="message"
+                      htmlFor="message"
                     >
                       Message:
                     </label>
                     <textarea
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 h-44 focus:outline-none focus:shadow-outline"
                       id="message"
+                      name="message"
+                      value={message}
+                      onChange={handleChange}
                       placeholder="Enter your message"
                     ></textarea>
                   </div>
