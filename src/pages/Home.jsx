@@ -13,6 +13,18 @@ const Home = () => {
     (state) => state.auth
   );
 
+  const {
+    properties,
+    propertyLoading,
+    propertySuccess,
+    propertyError,
+    propertyErrorMessage,
+  } = useSelector((state) => state.property);
+
+  const featuredProperties = properties.filter(
+    (property) => property.is_featured
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +32,15 @@ const Home = () => {
     //   navigate("/login");
     // }
 
-    if (isError && message) {
-      toast.error(message, { position: "bottom-center", theme: "colored" });
+    if ((isError && message) || (propertyError && propertyErrorMessage)) {
+      toast.error(message || propertyErrorMessage, {
+        position: "bottom-center",
+        theme: "colored",
+      });
     }
   }, [user, isError, message]);
 
-  if (isLoading) {
+  if (isLoading || propertyLoading) {
     return <LoadingScreen />;
   }
 
@@ -66,8 +81,9 @@ const Home = () => {
             Featured Properties
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FeaturedCard />
-            <FeaturedCard />
+            {featuredProperties.map((property, index) => (
+              <FeaturedCard key={index} property={property} />
+            ))}
           </div>
         </div>
       </section>
@@ -80,12 +96,9 @@ const Home = () => {
             Recent Properties
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
-            <PropertyCard />
+            {properties.map((property, index) => (
+              <PropertyCard key={index} property={property} />
+            ))}
           </div>
         </div>
       </section>
