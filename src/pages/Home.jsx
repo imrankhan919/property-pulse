@@ -4,9 +4,10 @@ import HeroSection from "../components/HeroSection";
 import FeaturedCard from "../components/FeaturedCard";
 import PropertyCard from "../components/PropertyCard";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import LoadingScreen from "../components/LoadingScreen";
+import { getProperties } from "../features/property/propertySlice";
 
 const Home = () => {
   const { user, isLoading, isError, isSuccess, message } = useSelector(
@@ -26,18 +27,18 @@ const Home = () => {
   );
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // if (!user) {
-    //   navigate("/login");
-    // }
-
     if ((isError && message) || (propertyError && propertyErrorMessage)) {
       toast.error(message || propertyErrorMessage, {
         position: "bottom-center",
         theme: "colored",
       });
     }
+
+    // Fetch Propertuies
+    dispatch(getProperties());
   }, [user, isError, message]);
 
   if (isLoading || propertyLoading) {
